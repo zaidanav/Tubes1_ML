@@ -260,11 +260,9 @@ class Layer:
             dZ = dA * self.activation_derivative(Z)
             # Cek nilai NaN/Inf
             if np.isnan(dZ).any() or np.isinf(dZ).any():
-                print(f"Warning: dZ contains NaN/Inf values for {self.activation_name}")
                 dZ = np.nan_to_num(dZ, nan=0.0, posinf=1e10, neginf=-1e10)
                 dZ = np.clip(dZ, -1e10, 1e10)
         
-        # Hitung gradien untuk weights dan biases
         self.dW = np.dot(X.T, dZ) / batch_size
         self.db = np.sum(dZ, axis=0, keepdims=True) / batch_size
         
@@ -272,7 +270,6 @@ class Layer:
         self.dW = np.clip(self.dW, -1e10, 1e10)
         self.db = np.clip(self.db, -1e10, 1e10)
         
-        # Hitung gradien untuk layer sebelumnya
         dA_prev = np.dot(dZ, self.W.T)
         
         return dA_prev
@@ -469,8 +466,6 @@ class FeedforwardNeuralNetwork:
             'activations': self.activations,
             'loss': self.loss_name,
             'layers': self.layers,
-            'use_rms_norm': self.use_rms_norm,
-            'rms_norm_layers': self.rms_norm_layers
         }
         
         with open(filename, 'wb') as f:
@@ -481,7 +476,6 @@ class FeedforwardNeuralNetwork:
         with open(filename, 'rb') as f:
             model_data = pickle.load(f)
         
-        # Create a new model with the same architecture
         model = cls(
             input_size=model_data['input_size'],
             layer_sizes=model_data['layer_sizes'],
@@ -491,8 +485,6 @@ class FeedforwardNeuralNetwork:
         
         # Load layers
         model.layers = model_data['layers']
-        model.use_rms_norm = model_data['use_rms_norm']
-        model.rms_norm_layers = model_data['rms_norm_layers']
         
         return model
     
@@ -500,11 +492,9 @@ class FeedforwardNeuralNetwork:
         """Plot the model as a graph with weights and gradients."""
         G = nx.DiGraph()
         
-        # Add input layer nodes
         for i in range(self.input_size):
             G.add_node(f"Input {i}", layer="Input", pos=(0, -i))
         
-        # Add hidden and output layer nodes
         layer_positions = []
         current_pos = 2
         
@@ -516,7 +506,6 @@ class FeedforwardNeuralNetwork:
             
             current_pos += 2
         
-        # Add edges with weights and gradients
         prev_size = self.input_size
         prev_layer_name = "Input"
         
@@ -537,10 +526,8 @@ class FeedforwardNeuralNetwork:
             prev_size = layer.n_neurons
             prev_layer_name = current_layer_name
         
-        # Create a figure
         plt.figure(figsize=(12, 10))
         
-        # Generate positions for drawing
         pos = nx.get_node_attributes(G, 'pos')
         
         # Draw nodes
