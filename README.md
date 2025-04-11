@@ -10,7 +10,7 @@ Repository ini berisi code implementasi Model FFNN from scratch beserta hasil Ex
 3. pilih bagian experiment yang ingin di run
 
 ### Membuat model
-Note : jangan lupa data import dan preprocessing
+Note : Sesuaikan data train dengan imputan ada( pada contoh ini menggunakan variabel yang sudah didefinisikan pada Experiment.ipynb) 
 
 #### buat parameter
 
@@ -24,7 +24,8 @@ base_architecture = {
 params = {
     'epochs': 20,
     'batch_size': 32,
-    'learning_rate': 0.1
+    'learning_rate': 0.1,
+    'verbose': 1
 }
 
 
@@ -48,9 +49,9 @@ history = model.train(
         epochs=params['epochs'],
         batch_size=params['batch_size'],
         learning_rate=params['learning_rate'],
-        verbose=1)
+        verbose=params['verbose'])
 
-Note : plot_history dan evaluate_model didefinisikan pada notebook bagian Visualization
+Note : plot_history dan evaluate_model didefinisikan pada notebook Experiment bagian Visualization
 
 #### plot hasil training
 
@@ -64,6 +65,6 @@ accuracy, _ = evaluate_model(model, X_test, y_test_onehot, y_test)
 
 ## Pembagian Tugas
 
-1. Farhan Raditya Aji / 13522142 : Experiment 5 , Bonus 1 dan 2, laporan
-2. Muhammad Zaidan Sa'dun Robbani / 13522146 : Experiment 3 dan 4, laporan
-3. Rafif Ardhinto Ichwantoro / 13522159 : Membuat implementasi Class FFNN, Experiment 1 & 2, laporan 
+1. Farhan Raditya Aji / 13522142              : Experiment 5 , Bonus 1 dan 2, laporan
+2. Muhammad Zaidan Sa'dun Robbani / 13522146  : Experiment 3 dan 4, laporan
+3. Rafif Ardhinto Ichwantoro / 13522159       : Membuat implementasi Class FFNN, Experiment 1 & 2, laporan 
